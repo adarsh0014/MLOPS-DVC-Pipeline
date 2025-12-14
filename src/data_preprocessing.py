@@ -7,6 +7,7 @@ from nltk.corpus import stopwords   # type: ignore
 import string
 import logging
 import os
+import yaml
 
 nltk.download('stopwords')
 nltk.download("punkt-tab")
@@ -40,7 +41,22 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
-
+def load_params(params_path: str) -> dict:
+    """Loading the params file"""
+    try:
+        with open(params_path,'r') as f:
+            params = yaml.safe_load(f)
+            logger.debug('Parameters retrieved from %s', params_path)
+        return params
+    except FileNotFoundError:
+        logger.error('File not found: %s', params_path)
+        raise
+    except yaml.YAMLError as e:
+        logger.error('YAML error: %s', e)
+        raise
+    except Exception as e:
+        logger.error("unable to load the params file %s",e)
+        raise 
 
 def transform_text(text: str):
     """
@@ -94,6 +110,7 @@ def main(text_column='text', target_column='target'):
     Main function to load raw data, preprocess it and save the processed data.
     """
     try:
+        params = load_params('params.yaml')
         # Fetch the data from data/raw
         train_data = pd.read_csv("./data/raw/train.csv")
         test_data = pd.read_csv("./data/raw/test.csv")
