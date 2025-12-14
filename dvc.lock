@@ -9,11 +9,11 @@ stages:
       size: 4027
     params:
       params.yaml:
-        data_ingestion.test_size: 0.2
+        data_ingestion.test_size: 0.3
     outs:
     - path: data/raw
       hash: md5
-      md5: bdd0f5712fcb23a7f2101028c8c68e9c.dir
+      md5: 9ff00f1416b7fe9ad3151cf6412d7a18.dir
       size: 484846
       nfiles: 2
   data_preprocessing:
@@ -21,7 +21,7 @@ stages:
     deps:
     - path: data/raw
       hash: md5
-      md5: bdd0f5712fcb23a7f2101028c8c68e9c.dir
+      md5: 9ff00f1416b7fe9ad3151cf6412d7a18.dir
       size: 484846
       nfiles: 2
     - path: src/data_preprocessing.py
@@ -31,16 +31,16 @@ stages:
     outs:
     - path: data/interim
       hash: md5
-      md5: 8678656f1018447d435c4649923103e7.dir
-      size: 259819
+      md5: 962909102c55803c02c94660467eeef0.dir
+      size: 262220
       nfiles: 2
   feature_engineering:
     cmd: python src/feature_engineering.py
     deps:
     - path: data/interim
       hash: md5
-      md5: 8678656f1018447d435c4649923103e7.dir
-      size: 259819
+      md5: 962909102c55803c02c94660467eeef0.dir
+      size: 262220
       nfiles: 2
     - path: src/feature_engineering.py
       hash: md5
@@ -48,20 +48,20 @@ stages:
       size: 4052
     params:
       params.yaml:
-        feature_engineering.max_features: 35
+        feature_engineering.max_features: 45
     outs:
     - path: data/processed
       hash: md5
-      md5: bd4252582b0f132c08d4d77cd5f1fb45.dir
-      size: 834952
+      md5: 1189da481d277be545d4c885fa1b653c.dir
+      size: 1072715
       nfiles: 2
   model_building:
     cmd: python src/model_building.py
     deps:
     - path: data/processed
       hash: md5
-      md5: bd4252582b0f132c08d4d77cd5f1fb45.dir
-      size: 834952
+      md5: 1189da481d277be545d4c885fa1b653c.dir
+      size: 1072715
       nfiles: 2
     - path: src/model_building.py
       hash: md5
@@ -69,26 +69,26 @@ stages:
       size: 4240
     params:
       params.yaml:
-        model_building.n_estimators: 22
+        model_building.n_estimators: 30
         model_building.random_state: 2
     outs:
     - path: models/model.pkl
       hash: md5
-      md5: b5daed9dc90a17d0df897e205fd17363
-      size: 747196
+      md5: e942e7bddb829cbb29ccfe8f5f7b4ace
+      size: 1074977
   model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: models/model.pkl
       hash: md5
-      md5: b5daed9dc90a17d0df897e205fd17363
-      size: 747196
+      md5: e942e7bddb829cbb29ccfe8f5f7b4ace
+      size: 1074977
     - path: src/model_evaluation.py
       hash: md5
-      md5: da8de9c735916191a3d182711ce0824b
-      size: 4590
+      md5: e7eebf316174ee00132ea2d5ddac27be
+      size: 4964
     outs:
     - path: reports/metrics.json
       hash: md5
-      md5: 9ee72b9e99c18f38c612561d67221013
-      size: 122
+      md5: f480170acc7f2dcfced4ca9ea9b4d65f
+      size: 121
